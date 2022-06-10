@@ -186,6 +186,11 @@ public class Main extends javax.swing.JFrame {
         jFormattedTextField6.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
 
         jButton4.setText("Crear Item");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jCheckBox1.setText("Alimento");
 
@@ -425,14 +430,67 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        int ptsVida = ((Number) jFormattedTextField1.getValue()).intValue();
-        int delay = ((Number) jFormattedTextField2.getValue()).intValue();
-        int costo = ((Number) jFormattedTextField3.getValue()).intValue();
-        Color color = jButton1.getBackground();
-        Mascotas m = new Mascotas(jTextField1.getText(), ptsVida, delay, costo, color);
+        boolean unico = false;
+        if (datosMantenimiento.size() > 0) {
+
+            for (int i = 0; i < datosMantenimiento.size(); i++) {
+                if (datosMantenimiento.get(i) instanceof Mascotas) {
+                    if (((Mascotas) datosMantenimiento.get(i)).getNombre().equals(jTextField1.getText())) {
+
+                        unico = false;
+                    } else {
+
+                        unico = true;
+                    }
+                }
+            }
+        } else {
+            unico = true;
+        }
+        if (unico) {
+            int ptsVida = ((Number) jFormattedTextField1.getValue()).intValue();
+            int delay = ((Number) jFormattedTextField2.getValue()).intValue();
+            int costo = ((Number) jFormattedTextField3.getValue()).intValue();
+            if (ptsVida % 200 == 0) {
+                if (delay % 100 == 0) {
+
+                    Color color = jButton1.getBackground();
+
+                    Mascotas m = new Mascotas(jTextField1.getText(), ptsVida, delay, costo, color);
+                    try {
+                        try {
+                            guardarDato(m);
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "El delay debe de ser un múltiplo de 100.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "La vida debe de ser un múltiplo de 200.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Necesita darle un nombre único a la mascota.");
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        int id = idItem + 1;
+        boolean alimento = jCheckBox1.isSelected();
+        int probabilidad = ((Number) jFormattedTextField5.getValue()).intValue();
+        int costo = ((Number) jFormattedTextField6.getValue()).intValue();
+
+        Items i = new Items(id, jTextField2.getText(), alimento, probabilidad, costo);
         try {
             try {
-                guardarDato(m);
+                guardarDato(i);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
@@ -441,7 +499,7 @@ public class Main extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -449,9 +507,13 @@ public class Main extends javax.swing.JFrame {
     public static void main(String args[]) throws FileNotFoundException, IOException, ClassNotFoundException {
 
         FileInputStream archivo = new FileInputStream(destino);
-        ObjectInputStream objeto = new ObjectInputStream(archivo);
-        datosMantenimiento = (ArrayList) objeto.readObject();
-        objeto.close();
+        if (archivo.available() != 0) {
+            ObjectInputStream objeto = new ObjectInputStream(archivo);
+
+            datosMantenimiento = (ArrayList) objeto.readObject();
+
+            objeto.close();
+        }
 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -491,7 +553,20 @@ public class Main extends javax.swing.JFrame {
         datosMantenimiento.add(datos);
         escribirDatos.writeObject(datosMantenimiento);
         escribirDatos.close();
-        JOptionPane.showMessageDialog(null, "Mascota creada.");
+        if (datos instanceof Mascotas) {
+            JOptionPane.showMessageDialog(null, "Mascota creada.");
+        } else if (datos instanceof Items) {
+            JOptionPane.showMessageDialog(null, "Item creado.");
+        } else if (datos instanceof Zonas) {
+            JOptionPane.showMessageDialog(null, "Zona creada.");
+        }
+
+        FileInputStream archivo2 = new FileInputStream(destino);
+
+        ObjectInputStream objeto = new ObjectInputStream(archivo2);
+
+        datosMantenimiento = (ArrayList) objeto.readObject();
+        objeto.close();
 
     }
 
@@ -547,4 +622,6 @@ public class Main extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private static String destino = "C:\\Users\\Admin\\Desktop\\UNITEC\\LAB2\\Lab8P2_CarlosBarahona\\datos.txt";
     private static ArrayList datosMantenimiento = new ArrayList();
+    private static int idItem = 0;
+    private static int idZona = 0;
 }

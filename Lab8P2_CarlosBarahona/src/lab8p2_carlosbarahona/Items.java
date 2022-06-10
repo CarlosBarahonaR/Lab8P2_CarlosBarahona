@@ -5,6 +5,8 @@
  */
 package lab8p2_carlosbarahona;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Admin
@@ -14,10 +16,10 @@ public class Items {
     private int idItem;
     private String nombre;
     private boolean alimento;
-    private double probabilidad;
+    private int probabilidad;
     private int costo;
 
-    public Items(int idItem, String nombre, boolean alimento, double probabilidad, int costo) {
+    public Items(int idItem, String nombre, boolean alimento, int probabilidad, int costo) {
         this.idItem = idItem;
         this.nombre = nombre;
         this.alimento = alimento;
@@ -49,12 +51,17 @@ public class Items {
         this.alimento = alimento;
     }
 
-    public double getProbabilidad() {
+    public int getProbabilidad() {
         return probabilidad;
     }
 
-    public void setProbabilidad(double probabilidad) {
-        this.probabilidad = probabilidad;
+    public void setProbabilidad(int probabilidad) {
+        if (probabilidad >= 0 && probabilidad <= 100) {
+            this.probabilidad = probabilidad;
+        } else {
+            JOptionPane.showMessageDialog(null, "La probabilidad debe de tener el rango entre 0 - 100.");
+        }
+
     }
 
     public int getCosto() {

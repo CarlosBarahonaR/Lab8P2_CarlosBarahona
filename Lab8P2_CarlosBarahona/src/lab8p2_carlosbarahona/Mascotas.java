@@ -7,6 +7,7 @@ package lab8p2_carlosbarahona;
 
 import java.awt.Color;
 import java.io.Serializable;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -41,7 +42,12 @@ public class Mascotas implements Serializable {
     }
 
     public void setPtsVida(int ptsVida) {
-        this.ptsVida = ptsVida;
+        if (ptsVida % 200 == 0) {
+            this.ptsVida = ptsVida;
+        } else {
+            JOptionPane.showMessageDialog(null, "La vida debe de ser un múltiplo de 200.");
+        }
+
     }
 
     public int getDelay() {
@@ -49,7 +55,12 @@ public class Mascotas implements Serializable {
     }
 
     public void setDelay(int delay) {
-        this.delay = delay;
+        if (delay % 100 == 0) {
+            this.delay = delay;
+        } else {
+            JOptionPane.showMessageDialog(null, "El delay debe de ser un múltiplo de 100.");
+        }
+
     }
 
     public int getCosto() {

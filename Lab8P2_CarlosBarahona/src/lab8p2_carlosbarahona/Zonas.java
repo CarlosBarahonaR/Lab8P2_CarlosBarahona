@@ -6,6 +6,7 @@
 package lab8p2_carlosbarahona;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,10 +18,10 @@ public class Zonas {
     private String nombre;
     private ArrayList<Items> items;
     private String remuneracion;
-    private double probabilidadDerrumbe;
-    private double probabilidadAtaque;
+    private int probabilidadDerrumbe;
+    private int probabilidadAtaque;
 
-    public Zonas(int idZona, String nombre, ArrayList<Items> items, String remuneracion, double probabilidadDerrumbe, double probabilidadAtaque) {
+    public Zonas(int idZona, String nombre, ArrayList<Items> items, String remuneracion, int probabilidadDerrumbe, int probabilidadAtaque) {
         this.idZona = idZona;
         this.nombre = nombre;
         this.items = items;
@@ -61,20 +62,30 @@ public class Zonas {
         this.remuneracion = remuneracion;
     }
 
-    public double getProbabilidadDerrumbe() {
+    public int getProbabilidadDerrumbe() {
         return probabilidadDerrumbe;
     }
 
-    public void setProbabilidadDerrumbe(double probabilidadDerrumbe) {
-        this.probabilidadDerrumbe = probabilidadDerrumbe;
+    public void setProbabilidadDerrumbe(int probabilidadDerrumbe) {
+        if (probabilidadDerrumbe >= 0 && probabilidadDerrumbe <= 100) {
+            this.probabilidadDerrumbe = probabilidadDerrumbe;
+        } else {
+            JOptionPane.showMessageDialog(null, "La probabilidad de derrumbe debe de tener el rango entre 0 - 100.");
+        }
+
     }
 
-    public double getProbabilidadAtaque() {
+    public int getProbabilidadAtaque() {
         return probabilidadAtaque;
     }
 
-    public void setProbabilidadAtaque(double probabilidadAtaque) {
-        this.probabilidadAtaque = probabilidadAtaque;
+    public void setProbabilidadAtaque(int probabilidadAtaque) {
+        if (probabilidadAtaque >= 0 && probabilidadAtaque <= 100) {
+            this.probabilidadAtaque = probabilidadAtaque;
+        } else {
+            JOptionPane.showMessageDialog(null, "La probabilidad de ataque de megalodon debe de tener el rango entre 0 - 100.");
+        }
+
     }
 
     @Override
