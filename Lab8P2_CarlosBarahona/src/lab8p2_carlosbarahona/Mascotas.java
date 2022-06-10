@@ -6,12 +6,13 @@
 package lab8p2_carlosbarahona;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 /**
  *
  * @author Admin
  */
-public class Mascotas {
+public class Mascotas implements Serializable {
 
     private String nombre;
     private int ptsVida;

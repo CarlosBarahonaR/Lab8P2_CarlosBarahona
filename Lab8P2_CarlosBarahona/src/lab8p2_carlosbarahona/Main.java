@@ -5,6 +5,19 @@
  */
 package lab8p2_carlosbarahona;
 
+import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Admin
@@ -16,6 +29,8 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        setLocationRelativeTo(null);
+        setTitle("Mascotas Virtuales");
     }
 
     /**
@@ -27,6 +42,7 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jColorChooser1 = new javax.swing.JColorChooser();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
@@ -140,8 +156,18 @@ public class Main extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButton1.setText("Color");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Crear Mascota");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("Crear Item");
@@ -389,10 +415,44 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Color c = jColorChooser1.showDialog(null, "Elige un Color", Color.RED);
+        if (c != null) {
+            jButton1.setBackground(c);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        int ptsVida = ((Number) jFormattedTextField1.getValue()).intValue();
+        int delay = ((Number) jFormattedTextField2.getValue()).intValue();
+        int costo = ((Number) jFormattedTextField3.getValue()).intValue();
+        Color color = jButton1.getBackground();
+        Mascotas m = new Mascotas(jTextField1.getText(), ptsVida, delay, costo, color);
+        try {
+            try {
+                guardarDato(m);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws FileNotFoundException, IOException, ClassNotFoundException {
+
+        FileInputStream archivo = new FileInputStream(destino);
+        ObjectInputStream objeto = new ObjectInputStream(archivo);
+        datosMantenimiento = (ArrayList) objeto.readObject();
+        objeto.close();
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -424,6 +484,18 @@ public class Main extends javax.swing.JFrame {
         });
     }
 
+    public void guardarDato(Object datos) throws FileNotFoundException, IOException, ClassNotFoundException {
+
+        FileOutputStream archivo = new FileOutputStream(destino);
+        ObjectOutputStream escribirDatos = new ObjectOutputStream(archivo);
+        datosMantenimiento.add(datos);
+        escribirDatos.writeObject(datosMantenimiento);
+        escribirDatos.close();
+        JOptionPane.showMessageDialog(null, "Mascota creada.");
+
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -432,6 +504,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JFormattedTextField jFormattedTextField3;
@@ -472,4 +545,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
+    private static String destino = "C:\\Users\\Admin\\Desktop\\UNITEC\\LAB2\\Lab8P2_CarlosBarahona\\datos.txt";
+    private static ArrayList datosMantenimiento = new ArrayList();
 }
