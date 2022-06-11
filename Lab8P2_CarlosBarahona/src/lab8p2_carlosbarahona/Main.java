@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -740,6 +741,7 @@ public class Main extends javax.swing.JFrame {
                 break;
             }
             case "!pet list": {
+                System.out.println("No se porque si entra al listado pero no hace lo que debería");
                 for (int i = 0; i < datosMantenimiento.size(); i++) {
                     if ((datosMantenimiento.get(i) instanceof Mascotas)) {
                         jTextArea1.append("\n");
@@ -774,12 +776,16 @@ public class Main extends javax.swing.JFrame {
                 }
             }
             case "!mine": {
+                
+                jTextArea1.append("\n");
+                jTextArea1.append("Minar.");
 
             }
             case "!fish": {
-
+                jTextArea1.append("Pescar.");
             }
             case "!zone list": {
+                 System.out.println("No se porque si entra al listado pero no hace lo que debería");
                 for (int i = 0; i < datosMantenimiento.size(); i++) {
                     if ((datosMantenimiento.get(i) instanceof Zonas)) {
                         jTextArea1.append("\n");
@@ -793,6 +799,7 @@ public class Main extends javax.swing.JFrame {
 
             }
             case "!item list": {
+                 System.out.println("No se porque si entra al listado pero no hace lo que debería");
                 for (int i = 0; i < datosMantenimiento.size(); i++) {
                     if ((datosMantenimiento.get(i) instanceof Items)) {
                         jTextArea1.append("\n");
@@ -807,6 +814,7 @@ public class Main extends javax.swing.JFrame {
 
             }
             case "!bag": {
+                 System.out.println("No se porque si entra al listado pero no hace lo que debería");
                 for (int i = 0; i < jugador.getItems().size(); i++) {
 
                     jTextArea1.append("\n");
@@ -822,7 +830,7 @@ public class Main extends javax.swing.JFrame {
 
             }
             case "!b": {
-
+                 System.out.println("No se porque si entra al listado pero no hace lo que debería");
                 jTextArea1.append("\n");
                 jTextArea1.append("Dinero actual:" + jugador.getDinero());
                 jTextArea1.append("\n");
