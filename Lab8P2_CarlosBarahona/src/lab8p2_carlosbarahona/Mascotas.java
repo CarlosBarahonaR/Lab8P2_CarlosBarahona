@@ -17,13 +17,15 @@ public class Mascotas implements Serializable {
 
     private String nombre;
     private int ptsVida;
+    private int vidaOriginal;
     private int delay;
     private int costo;
     private Color color;
 
-    public Mascotas(String nombre, int ptsVida, int delay, int costo, Color color) {
+    public Mascotas(String nombre, int ptsVida, int vidaOriginal, int delay, int costo, Color color) {
         this.nombre = nombre;
         this.ptsVida = ptsVida;
+        this.vidaOriginal = vidaOriginal;
         this.delay = delay;
         this.costo = costo;
         this.color = color;
@@ -48,6 +50,14 @@ public class Mascotas implements Serializable {
             JOptionPane.showMessageDialog(null, "La vida debe de ser un múltiplo de 200.");
         }
 
+    }
+
+    public int getVidaOriginal() {
+        return vidaOriginal;
+    }
+
+    public void setVidaOriginal(int vidaOriginal) {
+        this.vidaOriginal = vidaOriginal;
     }
 
     public int getDelay() {

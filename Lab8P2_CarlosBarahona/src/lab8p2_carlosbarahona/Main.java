@@ -510,7 +510,7 @@ public class Main extends javax.swing.JFrame {
 
                     Color color = jButton1.getBackground();
 
-                    Mascotas m = new Mascotas(jTextField1.getText(), ptsVida, delay, costo, color);
+                    Mascotas m = new Mascotas(jTextField1.getText(), ptsVida, ptsVida, delay, costo, color);
                     try {
                         try {
                             guardarDato(m);
@@ -688,7 +688,39 @@ public class Main extends javax.swing.JFrame {
                 break;
             }
             case "!pet feed": {
+                boolean itemBuscar = false;
+                if (datosMantenimiento.size() > 0) {
+                    for (int i = 0; i < datosMantenimiento.size(); i++) {
+                        if (datosMantenimiento.get(i) instanceof Jugadores) {
+                            for (int j = 0; ((Jugadores) datosMantenimiento.get(i)).getItems().size() < 10; j++) {
+                                if (((Jugadores) datosMantenimiento.get(j)).getItems().get(j).getIdItem() == Integer.parseInt(item) && ((Jugadores) datosMantenimiento.get(j)).getItems().get(j).isAlimento()) {
+                                    ((Jugadores) datosMantenimiento.get(j)).getItems().remove(j);
+                                    mascotaActiva.setPtsVida(mascotaActiva.getVidaOriginal());
+                                    itemBuscar = true;
+                                    for (int k = 0; k < ((Jugadores) datosMantenimiento.get(i)).getMascotas().size(); k++) {
+                                        if (((Jugadores) datosMantenimiento.get(i)).getMascotas().get(k).getNombre().equals(mascotaActiva.getNombre())) {
+                                            ((Jugadores) datosMantenimiento.get(i)).getMascotas().get(k).setPtsVida(((Jugadores) datosMantenimiento.get(i)).getMascotas().get(k).getVidaOriginal());
+                                            try {
+                                                guardarDato(jugador);
+                                            } catch (IOException ex) {
+                                                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                                            } catch (ClassNotFoundException ex) {
+                                                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    itemBuscar = false;
+                                }
+                            }
 
+                        }
+
+                    }
+                }
+                if (!itemBuscar) {
+                    JOptionPane.showMessageDialog(null, "El item no se encuentra en su lista de items o el item no es un alimento.");
+                }
                 break;
             }
         }
@@ -830,6 +862,6 @@ public class Main extends javax.swing.JFrame {
     private static ArrayList<Items> agregarItems = new ArrayList();
     private static Jugadores jugador;
     private static Mascotas mascotaActiva;
-    private static int idItem = -1;
-    private static int idZona = -1;
+    private static int idItem = 0;
+    private static int idZona = -0;
 }
