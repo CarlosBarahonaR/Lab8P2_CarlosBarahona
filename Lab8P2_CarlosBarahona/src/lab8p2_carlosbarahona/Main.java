@@ -713,7 +713,8 @@ public class Main extends javax.swing.JFrame {
                                     itemBuscar = true;
                                     for (int k = 0; k < ((Jugadores) datosMantenimiento.get(i)).getMascotas().size(); k++) {
                                         if (((Jugadores) datosMantenimiento.get(i)).getMascotas().get(k).getNombre().equals(mascotaActiva.getNombre())) {
-                                            ((Jugadores) datosMantenimiento.get(i)).getMascotas().get(k).setPtsVida(((Jugadores) datosMantenimiento.get(i)).getMascotas().get(k).getVidaOriginal());
+
+                                            jugador.getMascotas().get(k).setPtsVida(((Jugadores) datosMantenimiento.get(i)).getMascotas().get(k).getVidaOriginal());
                                             try {
                                                 guardarDato(jugador);
                                             } catch (IOException ex) {
@@ -738,9 +739,102 @@ public class Main extends javax.swing.JFrame {
                 }
                 break;
             }
+            case "!pet list": {
+                for (int i = 0; i < datosMantenimiento.size(); i++) {
+                    if ((datosMantenimiento.get(i) instanceof Mascotas)) {
+                        jTextArea1.append("\n");
+                        jTextArea1.append(i + ". " + ((Mascotas) datosMantenimiento.get(i)).getNombre());
+
+                    }
+
+                }
+            }
+
+            case "!adopt": {
+                for (int i = 0; i < datosMantenimiento.size(); i++) {
+                    if ((datosMantenimiento.get(i) instanceof Mascotas)) {
+                        if (((Mascotas) datosMantenimiento.get(i)).getNombre().equals(item)) {
+                            if (jugador.getDinero() == ((Mascotas) datosMantenimiento.get(i)).getCosto()) {
+                                jugador.getMascotas().add(mascotaActiva);
+                                jTextArea1.append("\n");
+                                jTextArea1.append("Ha conseguido la mascota: " + mascotaActiva.getNombre());
+                                try {
+                                    guardarDato(jugador);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (ClassNotFoundException ex) {
+                                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+            case "!mine": {
+
+            }
+            case "!fish": {
+
+            }
+            case "!zone list": {
+                for (int i = 0; i < datosMantenimiento.size(); i++) {
+                    if ((datosMantenimiento.get(i) instanceof Zonas)) {
+                        jTextArea1.append("\n");
+                        jTextArea1.append(i + ". " + ((Zonas) datosMantenimiento.get(i)).getNombre());
+
+                    }
+
+                }
+            }
+            case "!sell": {
+
+            }
+            case "!item list": {
+                for (int i = 0; i < datosMantenimiento.size(); i++) {
+                    if ((datosMantenimiento.get(i) instanceof Items)) {
+                        jTextArea1.append("\n");
+                        jTextArea1.append(i + ". " + ((Items) datosMantenimiento.get(i)).getNombre());
+
+                    }
+
+                }
+
+            }
+            case "!buy": {
+
+            }
+            case "!bag": {
+                for (int i = 0; i < jugador.getItems().size(); i++) {
+
+                    jTextArea1.append("\n");
+                    jTextArea1.append(i + ". " + jugador.getItems().get(i).getNombre());
+
+                }
+
+            }
+            case "!d": {
+
+            }
+            case "!w": {
+
+            }
+            case "!b": {
+
+                jTextArea1.append("\n");
+                jTextArea1.append("Dinero actual:" + jugador.getDinero());
+                jTextArea1.append("\n");
+                jTextArea1.append("Dinero en el banco:" + jugador.getDineroBanco());
+
+            }
+            case "!clear": {
+                jTextArea1.setText("");
+            }
             default:
                 jTextArea1.append("\n");
-                jTextArea1.append("Comando Incorrecto");
+                jTextArea1.append("Comando Incorrecto.");
                 break;
         }
     }//GEN-LAST:event_jButton6ActionPerformed
