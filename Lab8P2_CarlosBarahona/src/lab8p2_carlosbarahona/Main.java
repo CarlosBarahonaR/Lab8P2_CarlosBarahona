@@ -33,7 +33,7 @@ public class Main extends javax.swing.JFrame {
     public Main() throws FileNotFoundException, IOException, ClassNotFoundException {
 
         initComponents();
-
+        DefaultListModel modelo = new DefaultListModel();
         setLocationRelativeTo(null);
         setTitle("Mascotas Virtuales");
 
@@ -41,7 +41,7 @@ public class Main extends javax.swing.JFrame {
             for (int x = 0; x < datosMantenimiento.size(); x++) {
 
                 if (datosMantenimiento.get(x) instanceof Items) {
-                    DefaultListModel modelo = new DefaultListModel();
+
                     int id = ((Items) datosMantenimiento.get(x)).getIdItem();
                     String nombre = ((Items) datosMantenimiento.get(x)).getNombre();
                     modelo.addElement(id + ". " + nombre);
@@ -251,6 +251,7 @@ public class Main extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel14.setText("Agregar Item");
 
+        jList1.setModel(new DefaultListModel());
         jScrollPane2.setViewportView(jList1);
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -270,6 +271,7 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        jList2.setModel(new DefaultListModel());
         jScrollPane3.setViewportView(jList2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -529,17 +531,21 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        int id = 0;
         if (datosMantenimiento.size() > 0) {
             for (int i = 0; i < datosMantenimiento.size(); i++) {
                 if (datosMantenimiento.get(i) instanceof Items) {
-                    if (((Items) datosMantenimiento.get(i)).getIdItem() == idItem) {
-                        idItem = +1;
-                    }
+
+                    idItem = ((Items) datosMantenimiento.get(i)).getIdItem() + 1;
+                    id = idItem;
+
                 }
             }
+        } else {
+            id = idItem + 1;
+            idItem = +1;
         }
-        int id = idItem + 1;
-        idItem = +1;
+
         boolean alimento = jCheckBox1.isSelected();
         int probabilidad = ((Number) jFormattedTextField5.getValue()).intValue();
         int costo = ((Number) jFormattedTextField6.getValue()).intValue();
@@ -550,7 +556,7 @@ public class Main extends javax.swing.JFrame {
                 try {
                     guardarDato(i);
                     DefaultListModel modelo = new DefaultListModel();
-
+                    modelo = (DefaultListModel) jList1.getModel();
                     modelo.addElement(i.getIdItem() + ". " + i.getNombre());
 
                     jList1.setModel(modelo);
@@ -571,7 +577,7 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         String itemSeleccionado = jList1.getSelectedValue();
         DefaultListModel modelo = new DefaultListModel();
-
+        modelo = (DefaultListModel) jList2.getModel();
         modelo.addElement(itemSeleccionado);
 
         jList2.setModel(modelo);
@@ -581,19 +587,57 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        String itemSeleccionado = jList2.getSelectedValue();
-        StringTokenizer item = new StringTokenizer(itemSeleccionado, ".");
-        int a = Integer.parseInt(item.nextToken());
+        ArrayList<Items> items = new ArrayList();
 
-        if (datosMantenimiento.size() > 0) {
-            for (int i = 0; i < datosMantenimiento.size(); i++) {
-                if (datosMantenimiento.get(i) instanceof Items) {
-                    if (((Items) datosMantenimiento.get(i)).getIdItem() == a) {
+        for (int i = 0; i < jList2.getModel().getSize(); i++) {
+            String itemSeleccionado = jList2.getModel().getElementAt(i);
+            StringTokenizer item = new StringTokenizer(itemSeleccionado, ".");
+            int a = Integer.parseInt(item.nextToken());
+            if (datosMantenimiento.size() > 0) {
+                for (int j = 0; j < datosMantenimiento.size(); j++) {
+                    if (datosMantenimiento.get(j) instanceof Items) {
+                        if (((Items) datosMantenimiento.get(j)).getIdItem() == a) {
+                            items.add((Items) datosMantenimiento.get(j));
 
+                        }
                     }
                 }
             }
         }
+
+        int id = 0;
+        if (datosMantenimiento.size() > 0) {
+            for (int i = 0; i < datosMantenimiento.size(); i++) {
+                if (datosMantenimiento.get(i) instanceof Zonas) {
+
+                    idZona = ((Zonas) datosMantenimiento.get(i)).getIdZona() + 1;
+                    id = idZona;
+
+                }
+            }
+        } else {
+            id = idZona + 1;
+            idZona = +1;
+        }
+
+        int remA = idZona * 100;
+        int remB = idZona * 300;
+
+        String remuneración = remA + "-" + remB;
+
+        int probabilidadDerrumbe = ((Number) jFormattedTextField4.getValue()).intValue();
+        int probabilidadAtaque = ((Number) jFormattedTextField7.getValue()).intValue();
+
+        Zonas z = new Zonas(idZona, jTextField3.getText(), items, remuneración, probabilidadDerrumbe, probabilidadAtaque);
+
+        try {
+            guardarDato(z);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
