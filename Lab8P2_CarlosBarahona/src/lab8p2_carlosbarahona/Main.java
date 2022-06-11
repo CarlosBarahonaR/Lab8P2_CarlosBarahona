@@ -652,9 +652,9 @@ public class Main extends javax.swing.JFrame {
         String item = "";
         StringTokenizer c = new StringTokenizer(comando);
 
-        String comandoA = c.hasMoreTokens() ? c.nextToken() : null;
-        String comandoB = c.hasMoreTokens() ? c.nextToken() : null;
-        String idONombre = c.hasMoreTokens() ? c.nextToken() : null;
+        String comandoA = c.hasMoreTokens() ? c.nextToken() : "";
+        String comandoB = c.hasMoreTokens() ? c.nextToken() : "";
+        String idONombre = c.hasMoreTokens() ? c.nextToken() : "";
         switch (comandoB) {
             case "active":
                 comandoCompleto = comandoA + " " + comandoB;
@@ -676,13 +676,27 @@ public class Main extends javax.swing.JFrame {
 
         switch (comandoCompleto) {
             case "!pet active": {
+                boolean existeMascota = false;
                 if (datosMantenimiento.size() > 0) {
                     for (int i = 0; i < datosMantenimiento.size(); i++) {
-                        if (((Mascotas) datosMantenimiento.get(i)).getNombre().equals(item)) {
-                            mascotaActiva = ((Mascotas) datosMantenimiento.get(i));
+                        for (int k = 0; k < ((Jugadores) datosMantenimiento.get(i)).getMascotas().size(); k++) {
+                            if (((Jugadores) datosMantenimiento.get(i)).getMascotas().get(k).getNombre().equals(item)) {
+                                mascotaActiva = ((Mascotas) datosMantenimiento.get(i));
+                                jTextArea1.append("\n");
+                                jTextArea1.append(comando);
+                                jTextArea1.append("\n");
+                                jTextArea1.append("Mascota activa" + mascotaActiva.getNombre());
+                                existeMascota = true;
+                            } else {
+                                existeMascota = false;
+                            }
 
                         }
                     }
+                }
+                if (!existeMascota) {
+                    jTextArea1.append("\n");
+                    jTextArea1.append("La mascota no existe en su inventario.");
                 }
 
                 break;
@@ -719,10 +733,15 @@ public class Main extends javax.swing.JFrame {
                     }
                 }
                 if (!itemBuscar) {
-                    JOptionPane.showMessageDialog(null, "El item no se encuentra en su lista de items o el item no es un alimento.");
+                    jTextArea1.append("\n");
+                    jTextArea1.append("El item no se encuentra en su lista de items o el item no es un alimento.");
                 }
                 break;
             }
+            default:
+                jTextArea1.append("\n");
+                jTextArea1.append("Comando Incorrecto");
+                break;
         }
     }//GEN-LAST:event_jButton6ActionPerformed
 
