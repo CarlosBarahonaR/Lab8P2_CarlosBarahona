@@ -5,13 +5,14 @@
  */
 package lab8p2_carlosbarahona;
 
+import java.io.Serializable;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Admin
  */
-public class Items {
+public class Items implements Serializable {
 
     private int idItem;
     private String nombre;

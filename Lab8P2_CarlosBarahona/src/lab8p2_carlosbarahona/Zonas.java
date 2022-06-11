@@ -5,6 +5,7 @@
  */
 package lab8p2_carlosbarahona;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -12,7 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author Admin
  */
-public class Zonas {
+public class Zonas implements Serializable {
 
     private int idZona;
     private String nombre;

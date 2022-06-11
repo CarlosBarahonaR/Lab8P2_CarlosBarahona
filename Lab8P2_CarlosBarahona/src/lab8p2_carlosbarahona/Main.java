@@ -14,8 +14,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,10 +30,45 @@ public class Main extends javax.swing.JFrame {
     /**
      * Creates new form Main
      */
-    public Main() {
+    public Main() throws FileNotFoundException, IOException, ClassNotFoundException {
+
         initComponents();
+
         setLocationRelativeTo(null);
         setTitle("Mascotas Virtuales");
+
+        if (datosMantenimiento.size() > 0) {
+            for (int x = 0; x < datosMantenimiento.size(); x++) {
+
+                if (datosMantenimiento.get(x) instanceof Items) {
+                    DefaultListModel modelo = new DefaultListModel();
+                    int id = ((Items) datosMantenimiento.get(x)).getIdItem();
+                    String nombre = ((Items) datosMantenimiento.get(x)).getNombre();
+                    modelo.addElement(id + ". " + nombre);
+
+                    jList1.setModel(modelo);
+
+                } else if (datosMantenimiento.get(x) instanceof Jugadores) {
+                    jugador = (Jugadores) datosMantenimiento.get(x);
+                }
+            }
+        }
+
+        if (datosMantenimiento.size() > 0) {
+            for (int x = 0; x < datosMantenimiento.size(); x++) {
+
+                if (datosMantenimiento.get(x) instanceof Jugadores) {
+                    datosMantenimiento.remove(x);
+                }
+            }
+        }
+
+        FileOutputStream archivo = new FileOutputStream(destino);
+        ObjectOutputStream escribirDatos = new ObjectOutputStream(archivo);
+
+        datosMantenimiento.add(jugador);
+        escribirDatos.writeObject(datosMantenimiento);
+        escribirDatos.close();
     }
 
     /**
@@ -226,6 +264,11 @@ public class Main extends javax.swing.JFrame {
         });
 
         jButton5.setText("Crear Zona");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jScrollPane3.setViewportView(jList2);
 
@@ -435,7 +478,7 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        boolean unico = false;
+        boolean unico = true;
         if (datosMantenimiento.size() > 0) {
 
             for (int i = 0; i < datosMantenimiento.size(); i++) {
@@ -444,7 +487,6 @@ public class Main extends javax.swing.JFrame {
 
                         unico = false;
                     } else {
-
                         unico = true;
                     }
                 }
@@ -487,28 +529,72 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        if (datosMantenimiento.size() > 0) {
+            for (int i = 0; i < datosMantenimiento.size(); i++) {
+                if (datosMantenimiento.get(i) instanceof Items) {
+                    if (((Items) datosMantenimiento.get(i)).getIdItem() == idItem) {
+                        idItem = +1;
+                    }
+                }
+            }
+        }
         int id = idItem + 1;
+        idItem = +1;
         boolean alimento = jCheckBox1.isSelected();
         int probabilidad = ((Number) jFormattedTextField5.getValue()).intValue();
         int costo = ((Number) jFormattedTextField6.getValue()).intValue();
+        if (probabilidad >= 0 && probabilidad <= 100) {
 
-        Items i = new Items(id, jTextField2.getText(), alimento, probabilidad, costo);
-        try {
+            Items i = new Items(id, jTextField2.getText(), alimento, probabilidad, costo);
             try {
-                guardarDato(i);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+                try {
+                    guardarDato(i);
+                    DefaultListModel modelo = new DefaultListModel();
+
+                    modelo.addElement(i.getIdItem() + ". " + i.getNombre());
+
+                    jList1.setModel(modelo);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            JOptionPane.showMessageDialog(null, "La probabilidad debe de tener un rango entre 0-100.");
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        String itemSeleccionado = jList1.getSelectedValue();
+        DefaultListModel modelo = new DefaultListModel();
+
+        modelo.addElement(itemSeleccionado);
+
+        jList2.setModel(modelo);
+
+
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String itemSeleccionado = jList2.getSelectedValue();
+        StringTokenizer item = new StringTokenizer(itemSeleccionado, ".");
+        int a = Integer.parseInt(item.nextToken());
+
+        if (datosMantenimiento.size() > 0) {
+            for (int i = 0; i < datosMantenimiento.size(); i++) {
+                if (datosMantenimiento.get(i) instanceof Items) {
+                    if (((Items) datosMantenimiento.get(i)).getIdItem() == a) {
+
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -520,9 +606,15 @@ public class Main extends javax.swing.JFrame {
             ObjectInputStream objeto = new ObjectInputStream(archivo);
 
             datosMantenimiento = (ArrayList) objeto.readObject();
-
             objeto.close();
         }
+
+        ArrayList<Items> i = new ArrayList();
+        ArrayList<Mascotas> m = new ArrayList();
+
+        Jugadores j = new Jugadores(i, m, 0, 0);
+
+        jugador = j;
 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -550,12 +642,18 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                try {
+                    new Main().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
-    public void guardarDato(Object datos) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static void guardarDato(Object datos) throws FileNotFoundException, IOException, ClassNotFoundException {
 
         FileOutputStream archivo = new FileOutputStream(destino);
         ObjectOutputStream escribirDatos = new ObjectOutputStream(archivo);
@@ -631,6 +729,8 @@ public class Main extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private static String destino = "C:\\Users\\Admin\\Desktop\\UNITEC\\LAB2\\Lab8P2_CarlosBarahona\\datos.txt";
     private static ArrayList datosMantenimiento = new ArrayList();
-    private static int idItem = 0;
-    private static int idZona = 0;
+    private static ArrayList<Items> agregarItems = new ArrayList();
+    private static Jugadores jugador;
+    private static int idItem = -1;
+    private static int idZona = -1;
 }

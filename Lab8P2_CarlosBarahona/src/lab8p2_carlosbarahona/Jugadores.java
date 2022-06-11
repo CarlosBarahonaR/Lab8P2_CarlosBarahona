@@ -5,13 +5,14 @@
  */
 package lab8p2_carlosbarahona;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Admin
  */
-public class Jugadores {
+public class Jugadores implements Serializable {
 
     private ArrayList<Items> items;
     private ArrayList<Mascotas> mascotas;
