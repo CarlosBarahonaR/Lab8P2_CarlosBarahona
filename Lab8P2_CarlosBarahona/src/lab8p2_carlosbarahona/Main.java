@@ -420,6 +420,11 @@ public class Main extends javax.swing.JFrame {
         jScrollPane4.setViewportView(jTextArea1);
 
         jButton6.setText(">");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -640,6 +645,55 @@ public class Main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        String comando = jTextField4.getText();
+        String comandoCompleto = "";
+        String item = "";
+        StringTokenizer c = new StringTokenizer(comando);
+
+        String comandoA = c.hasMoreTokens() ? c.nextToken() : null;
+        String comandoB = c.hasMoreTokens() ? c.nextToken() : null;
+        String idONombre = c.hasMoreTokens() ? c.nextToken() : null;
+        switch (comandoB) {
+            case "active":
+                comandoCompleto = comandoA + " " + comandoB;
+                item = idONombre;
+                break;
+            case "feed":
+                comandoCompleto = comandoA + " " + comandoB;
+                item = idONombre;
+                break;
+            case "list":
+                comandoCompleto = comandoA + " " + comandoB;
+                item = idONombre;
+                break;
+            default:
+                comandoCompleto = comandoA;
+                item = comandoB;
+                break;
+        }
+
+        switch (comandoCompleto) {
+            case "!pet active": {
+                if (datosMantenimiento.size() > 0) {
+                    for (int i = 0; i < datosMantenimiento.size(); i++) {
+                        if (((Mascotas) datosMantenimiento.get(i)).getNombre().equals(item)) {
+                            mascotaActiva = ((Mascotas) datosMantenimiento.get(i));
+
+                        }
+                    }
+                }
+
+                break;
+            }
+            case "!pet feed": {
+
+                break;
+            }
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -775,6 +829,7 @@ public class Main extends javax.swing.JFrame {
     private static ArrayList datosMantenimiento = new ArrayList();
     private static ArrayList<Items> agregarItems = new ArrayList();
     private static Jugadores jugador;
+    private static Mascotas mascotaActiva;
     private static int idItem = -1;
     private static int idZona = -1;
 }
